@@ -1,0 +1,41 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class BulletData : MonoBehaviour
+{
+    [SerializeField] float damageDone;
+    [SerializeField] float travelSpeed;
+    [SerializeField] float lifespan = 1.5f;
+
+    private GameManager instance;
+    private UIManager healthTracker;
+
+    void Awake()
+    {
+        instance = GameManager.Instance;
+        healthTracker = instance.healthTracker;
+    }
+
+    void Start() { Destroy(gameObject, lifespan); }
+
+    void Update()
+    {
+        transform.position += transform.forward * travelSpeed * Time.deltaTime;
+    }
+
+    void OnTriggerEnter(Collider other)
+    {
+
+        Debug.Log("Hit Something");
+
+        Pawn otherPawn = other.GetComponent<Pawn>();
+        Health otherHealth = other.GetComponent<Health>();
+
+        if (otherHealth != null && otherPawn != null)
+        {
+            healthTracker.RecieveDamage(otherHealth, damageDone, otherPawn.isPlayer);
+        }
+        Destroy(gameObject);
+    }
+}
