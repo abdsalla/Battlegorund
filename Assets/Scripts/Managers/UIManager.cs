@@ -16,7 +16,7 @@ public class UIManager : MonoBehaviour
         if (isPlayer)
         {
             unitToDamage.CurrentHealth -= damageValue;
-            unitToDamage.health.fillAmount -= damageValue;
+            unitToDamage.health.value = unitToDamage.CurrentHealth;
         }
         else if (!isPlayer)
         {
@@ -29,7 +29,7 @@ public class UIManager : MonoBehaviour
         if (isPlayer)
         {
             unitToHeal.CurrentHealth += healValue;
-            unitToHeal.health.fillAmount += healValue;
+            unitToHeal.health.value = unitToHeal.CurrentHealth;
         }
         else if (!isPlayer) unitToHeal.CurrentHealth += healValue;
     }

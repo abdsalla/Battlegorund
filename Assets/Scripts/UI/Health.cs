@@ -9,13 +9,15 @@ public class UnityFloatEvent : UnityEvent<float> { }
 public class Health : MonoBehaviour
 {
     private GameManager instance;
+    private AIController ai;
+    private FiniteStateMachine fsm;
 
     [Header("UI Values")]
     public float maxHealth;
     private float _currentHealth;
 
     [Header("UI Visuals")]
-    public Image health;
+    public Slider health;
 
     // UI Event for health, stamina and death
     public UnityFloatEvent OnHealthChange = new UnityFloatEvent();
@@ -40,6 +42,17 @@ public class Health : MonoBehaviour
     {
         instance = GameManager.Instance;
         _currentHealth = maxHealth;
+    }
+
+    void Update()
+    {
+        ai = GetComponent<AIController>();
+        fsm = GetComponent<FiniteStateMachine>();
+        if (ai != null && CurrentHealth < 25)
+        {
+            Debug.Log("Health Below 25");
+            fsm.currentState = AIState.State.Retreat;
+        }
     }
 
     public void DestroySelf() // Handles death and increments/decrements of player counters

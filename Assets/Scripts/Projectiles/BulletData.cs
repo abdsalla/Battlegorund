@@ -26,9 +26,6 @@ public class BulletData : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-
-        Debug.Log("Hit Something");
-
         Pawn otherPawn = other.GetComponent<Pawn>();
         Health otherHealth = other.GetComponent<Health>();
 
