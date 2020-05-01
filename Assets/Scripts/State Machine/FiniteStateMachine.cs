@@ -8,7 +8,7 @@ public class FiniteStateMachine : AIState
 {
     private AIController ai;
     private Health health;
-    private float dangerZone;
+    [SerializeField] float dangerZone;
 
     void Start()
     {
@@ -20,6 +20,7 @@ public class FiniteStateMachine : AIState
     {
        Behavior();
        Personality();
+       Debug.Log(CheckHealth());
     }
 
     public override void Behavior()
@@ -87,15 +88,17 @@ public class FiniteStateMachine : AIState
     {
         RaycastHit hit;
         Health unitCheck;
+        TankData playerCheck;
         GameObject objInRange;
 
         if (Physics.Raycast(pawn.firePoint.transform.position, transform.forward, out hit, ai.aggroRadius))
         {
             objInRange = hit.collider.gameObject;
             unitCheck = objInRange.GetComponent<Health>();
+            playerCheck = objInRange.GetComponent<TankData>();
 
             if (unitCheck == null) return false; // No health component, not a tank
-            else // It is a tank
+            else if( unitCheck != null && playerCheck != null) // It is a tank
             {
                 // In Chase Range
                 target = objInRange.transform;
@@ -110,15 +113,17 @@ public class FiniteStateMachine : AIState
         RaycastHit hit;
         Health unitCheck;
         GameObject objInRange;
+        TankData playerCheck;
 
 
         if (Physics.Raycast(pawn.firePoint.transform.position, transform.forward, out hit, ai.firingRange))
         {
             objInRange = hit.collider.gameObject;
             unitCheck = objInRange.GetComponent<Health>();
+            playerCheck = objInRange.GetComponent<TankData>();
 
             if (unitCheck == null) return false; // No health component, not a tank
-            else // It is a tank
+            else if (unitCheck != null && playerCheck != null) // It is a tank
             {
                 // In Attack Range
                 target = objInRange.transform;

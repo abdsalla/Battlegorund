@@ -8,6 +8,12 @@ public abstract class Pickup : MonoBehaviour
 {
     [SerializeField] Vector3 spinRotation;
     protected Pawn receiverPawn;
+    public bool isPermanent;
+    public float duration;
+
+    public enum PowerUpType { Sheild, RapidFire, Speed }
+    public PowerUpType powerUpType;
+
 
     public virtual void Start() { }
 

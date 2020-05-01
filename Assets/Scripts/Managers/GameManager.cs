@@ -20,26 +20,21 @@ public class GameManager : MonoBehaviour
     public float pointsDeducted = 5;
 
     [Header("AI")]
-    public GameObject hunter; // enemy prefab
+    public GameObject hunter;
     public GameObject glider;
     public GameObject sniper;
     public GameObject rammer;
-    public int activeEnemies;
+    public List<GameObject> activeEnemies;
     public int allowedEnemies;
 
     [Header("Spawn Locations")]
-    public Vector3 playerSpawnPoint;
-    public Transform[] enemySpawnPoints;
+    public List<GameObject> playerSpawnPoints;
+    public List<Transform> enemySpawnPoints;
+    [SerializeField] PlayerSpawn playerSpawn;
 
     [Header("Powerup Spots")]
-    public GameObject[] powerupSpots;
+    public List<GameObject> powerupSpots;
 
-    [Header("Patrol Paths")]
-    public Transform[] firstWaypoints;
-    public Transform[] secondWaypoints;
-    public Transform[] thirdWaypoints;
-    public Transform[] fourthWaypoints;
-    
     [Header("UI")]
     public UIManager healthTracker;
 
@@ -55,70 +50,23 @@ public class GameManager : MonoBehaviour
             instance = this;
             DontDestroyOnLoad(this.gameObject);
         }
-        PlayerSpawn();
-        EnemySpawn();
     }
 
-    void EnemySpawn() // Starting Enemy spawn only happens once
+    void Update()
     {
-        GameObject cHunter;
-        AIController hController;
-
-        GameObject cSniper;
-        AIController sController;
-
-        GameObject cRammer;
-        AIController rController;
-
-        GameObject cGlider;
-        AIController gController;
-
-        cHunter = Instantiate(hunter, enemySpawnPoints[0]);
-        hController = cHunter.GetComponent<AIController>();
-        hController.currentWaypointList = 0;
-
-        cSniper = Instantiate(sniper, enemySpawnPoints[1]);
-        sController = cSniper.GetComponent<AIController>();
-        sController.currentWaypointList = 1;
-
-        cRammer = Instantiate(rammer, enemySpawnPoints[2]);
-        rController = cRammer.GetComponent<AIController>();
-        rController.currentWaypointList = 2;
-
-        cGlider = Instantiate(glider, enemySpawnPoints[3]);
-        gController = cGlider.GetComponent<AIController>();
-        gController.currentWaypointList = 3;
-
-        //enemy = Instantiate(aI, enemySpawnPoints[activeEnemies]);
-        /*for (int i = activeEnemies; activeEnemies != allowedEnemies; i++)
-        {
-            enemy = Instantiate(hunter, enemySpawnPoints[i]);
-            controller = enemy.GetComponent<AIController>();          
-            switch (i)
-            {
-                case 0:
-                    controller.currentWaypointList = 0;
-                    break;
-                case 1:
-                    controller.currentWaypointList = 1;
-                    break;
-                case 2:
-                    controller.currentWaypointList = 2;
-                    break;
-                case 3:
-                    controller.currentWaypointList = 3;
-                    break;
-            }
-            activeEnemies += 1;
-        }*/
+        if (currentPlayer == null && lives > 0) PlayerSpawn(RandomSpawn(playerSpawnPoints));
     }
 
-    void PlayerSpawn() // Spawns Player at the given spawn point if there is no active Player in the scene
+    public void PlayerSpawn(GameObject spawnPoint) // Spawns Player at the given spawn point if there is no active Player in the scene
     {
-        if (!currentPlayer)
-        {
-            currentPlayer = Instantiate(player);
-        }
-        currentPlayer.transform.position = playerSpawnPoint;
+        if (!currentPlayer) currentPlayer = Instantiate(player, spawnPoint.transform.position, Quaternion.identity);
+    }
+
+    public GameObject RandomSpawn(List<GameObject> spawnPoints)
+    {
+
+        int spawnToGet = UnityEngine.Random.seed;
+        spawnToGet = UnityEngine.Random.Range(0, spawnPoints.Count);
+        return spawnPoints[spawnToGet];
     }
 }

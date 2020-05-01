@@ -281,6 +281,7 @@ MonoBehaviour:
   roundSpeed: 100
   shotCooldown: 0
   controller: {fileID: 5453361946534050015}
+  activeEffects: []
   isPlayer: 0
 --- !u!114 &5453361946534050015
 MonoBehaviour:
@@ -295,12 +296,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   fsm: {fileID: 2388687147315539953}
+  roomHeal: {fileID: 0}
   currentWaypointList: 0
   currentWaypoint: 0
   aggroRadius: 5
   firingRange: 3
   stoppingDist: 0.3
   avoidanceTime: 2
+  listInUse: []
   health: {fileID: 7963381137975132084}
 --- !u!114 &2388687147315539953
 MonoBehaviour:
@@ -318,6 +321,7 @@ MonoBehaviour:
   avoidanceStage: 0
   personality: 1
   currentState: 0
+  dangerZone: 25
 --- !u!114 &7963381137975132084
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -331,7 +335,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
+  maxSheild: 0
+  _currentHealth: 100
+  _sheildAmount: 0
   health: {fileID: 0}
+  sheild: {fileID: 0}
   OnDeath:
     m_PersistentCalls:
       m_Calls:

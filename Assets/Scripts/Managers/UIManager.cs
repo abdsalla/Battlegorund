@@ -15,8 +15,16 @@ public class UIManager : MonoBehaviour
     {
         if (isPlayer)
         {
-            unitToDamage.CurrentHealth -= damageValue;
-            unitToDamage.health.value = unitToDamage.CurrentHealth;
+            if (unitToDamage._sheildAmount > 0)
+            {
+                unitToDamage._sheildAmount -= damageValue;
+                unitToDamage.sheild.value = unitToDamage._sheildAmount;
+            }
+            else
+            {
+                unitToDamage.CurrentHealth -= damageValue;
+                unitToDamage.health.value = unitToDamage.CurrentHealth;
+            }   
         }
         else if (!isPlayer)
         {

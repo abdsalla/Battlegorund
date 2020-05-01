@@ -14,10 +14,13 @@ public class Health : MonoBehaviour
 
     [Header("UI Values")]
     public float maxHealth;
-    private float _currentHealth;
+    public float maxSheild;
+    [SerializeField] float _currentHealth;   
+    public float _sheildAmount;
 
     [Header("UI Visuals")]
     public Slider health;
+    public Slider sheild;
 
     // UI Event for health, stamina and death
     public UnityFloatEvent OnHealthChange = new UnityFloatEvent();
@@ -42,6 +45,7 @@ public class Health : MonoBehaviour
     {
         instance = GameManager.Instance;
         _currentHealth = maxHealth;
+        _sheildAmount = 0;
     }
 
     void Update()
@@ -53,6 +57,9 @@ public class Health : MonoBehaviour
             Debug.Log("Health Below 25");
             fsm.currentState = AIState.State.Retreat;
         }
+
+        UpdateSheild();
+
     }
 
     public void DestroySelf() // Handles death and increments/decrements of player counters
@@ -66,26 +73,18 @@ public class Health : MonoBehaviour
                 instance.lives -= 1;
                 instance.score -= instance.pointsDeducted;
                 Destroy(gameObject);
-                //if (instance.lives <= 0) instance.Loss();
-               /* StartCoroutine(instance.PlayerRespawn());
-                StopCoroutine(instance.PlayerRespawn());*/
             }
             else if (unitCheck.isPlayer == false)
             {
                 instance.score += instance.pointsAwarded;
                 Destroy(gameObject, 2.0f);
-                //if (instance.score >= 150) { instance.Victory(); }
-
-                /*for (int i = instance.activeEnemies; i >= instance.allowedEnemies; i--)
-                {
-                    instance.activeEnemies -= 1;
-                    if (instance.activeEnemies < instance.allowedEnemies)
-                    {
-                        instance.EnemyRespawn();
-                        instance.activeEnemies += 1;
-                    }
-                }*/
             }
         }
+    }
+
+    void UpdateSheild()
+    {
+        float newSheild = _sheildAmount;
+        sheild.value = newSheild;
     }
 }

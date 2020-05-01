@@ -7,16 +7,18 @@ using UnityEngine;
 public class AIController : MonoBehaviour
 {
     [SerializeField] FiniteStateMachine fsm;
+    [SerializeField] GameObject roomHeal;
     private GameManager instance;
     private float exitTime = 0;
     private Pawn pawn;
 
     public int currentWaypointList;
-    public int currentWaypoint;
+    public int currentWaypoint = 0;
     public float aggroRadius = 5.0f;
     public float firingRange = 3.0f;
     public float stoppingDist = .3f;
     public float avoidanceTime = 2.0f;
+    public Transform[] listInUse;
     public Health health;
 
 
@@ -95,39 +97,10 @@ public class AIController : MonoBehaviour
 
     public void Patrol()
     {
-        Transform[] listInUse; // List of patrol paths
-
-        switch (currentWaypointList) // assigns path based on list number
-        {
-            case 0:
-                listInUse = instance.firstWaypoints;
-                fsm.target = listInUse[currentWaypoint];
-                pawn.MoveTo(listInUse[currentWaypoint]);
-                pawn.RotateTo(listInUse[currentWaypoint]);
-                PointTransition(listInUse);
-                break;
-            case 1:
-                listInUse = instance.secondWaypoints;
-                fsm.target = listInUse[currentWaypoint];
-                pawn.MoveTo(listInUse[currentWaypoint]);
-                pawn.RotateTo(listInUse[currentWaypoint]);
-                PointTransition(listInUse);
-                break;
-            case 2:
-                listInUse = instance.thirdWaypoints;
-                fsm.target = listInUse[currentWaypoint];
-                pawn.MoveTo(listInUse[currentWaypoint]);
-                pawn.RotateTo(listInUse[currentWaypoint]);
-                PointTransition(listInUse);
-                break;
-            case 3:
-                listInUse = instance.fourthWaypoints;
-                fsm.target = listInUse[currentWaypoint];
-                pawn.MoveTo(listInUse[currentWaypoint]);
-                pawn.RotateTo(listInUse[currentWaypoint]);
-                PointTransition(listInUse);
-                break;
-        }
+        fsm.target = listInUse[currentWaypoint];
+        pawn.MoveTo(listInUse[currentWaypoint]);
+        pawn.RotateTo(listInUse[currentWaypoint]);
+        PointTransition(listInUse);
     }
 
     void PointTransition(Transform[] currentList) // If we are close to the waypoint,
@@ -155,7 +128,7 @@ public class AIController : MonoBehaviour
     {
         Debug.Log("Finding Heal");
         fsm.target = null;
-        if (fsm.target == null && instance.powerupSpots != null) fsm.target = instance.powerupSpots[Random.Range(0, instance.powerupSpots.Length)].transform;
+        if (fsm.target == null && roomHeal != null) fsm.target = roomHeal.transform;
     }
 
     public void GetHeal()
@@ -199,6 +172,5 @@ public class AIController : MonoBehaviour
         Health otherHealth = collision.gameObject.GetComponent<Health>();
 
         if (fsm.personality == AIState.Personalities.Rammer && otherHealth != null && playerCheck != null) instance.healthTracker.RecieveDamage(otherHealth, 5, true);
-        else if (fsm.personality == AIState.Personalities.Rammer && otherHealth != null && playerCheck == null) instance.healthTracker.RecieveDamage(otherHealth, 5, true);
     }
 }

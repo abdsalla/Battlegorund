@@ -2,6 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public class ActiveEffects : MonoBehaviour
+{
+    public Pickup powerUp;
+    public float duration;
+
+    public ActiveEffects (Pickup PowerUp, float Duration)
+    {
+        powerUp = PowerUp;
+        duration = Duration;
+    }
+
+    void Update()
+    {
+        duration -= Time.deltaTime;    
+    }
+}
+
 public class Pawn : MonoBehaviour
 {
     [Header("Movement")]
@@ -19,6 +36,8 @@ public class Pawn : MonoBehaviour
     [Header("AI Values")]
     [SerializeField] AIController controller;
 
+    public List<ActiveEffects> activeEffects;
+
     public bool isPlayer;
 
 
@@ -30,6 +49,8 @@ public class Pawn : MonoBehaviour
     void Update()
     {
         if (shotCooldown < fireRate) shotCooldown += Time.deltaTime;
+
+        if (isPlayer) CheckEffects();
     }
 
     public void Move(string mDir)
@@ -90,5 +111,43 @@ public class Pawn : MonoBehaviour
         Vector3 rotateVector;
         rotateVector = Vector3.up * speed * Time.deltaTime;
         transform.Rotate(rotateVector, Space.Self);
+    }
+
+    public void AddEffect(Pickup powerUp, float duration)
+    {
+        if (powerUp.isPermanent)
+        {
+            duration = 0;
+            return;
+        }
+
+        activeEffects.Add(new ActiveEffects(powerUp, duration));
+
+        for (int i = 0; i <= activeEffects.Count; i++)
+        {
+            if (activeEffects[i] == null)
+            {
+                activeEffects[i].powerUp = powerUp;
+                activeEffects[i].duration = duration;
+            }
+        }
+    }
+
+    void CheckEffects()
+    {
+
+        for (int i = activeEffects.Count; i > 0; i--)
+        {
+            if (activeEffects[i].duration <= 0)
+            {
+                if (activeEffects[i].powerUp.powerUpType == Pickup.PowerUpType.Speed)
+                {
+                    moveSpeed -= 3f;
+                    reverseSpeed -= 3f;
+                }
+                else if (activeEffects[i].powerUp.powerUpType == Pickup.PowerUpType.RapidFire) fireRate -= .3f;
+                activeEffects.Remove(activeEffects[i]);
+            }
+        }
     }
 }

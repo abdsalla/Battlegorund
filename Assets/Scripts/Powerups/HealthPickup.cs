@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class HealthPickup : Pickup
 {
-    public GameObject healthPack; // health Item
 
     private GameManager instance;
 
     void Start()
     {
         instance = GameManager.Instance;
+        isPermanent = false;
     }
 
     public override void OnPickup(GameObject target)
