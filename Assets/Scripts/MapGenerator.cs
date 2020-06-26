@@ -5,9 +5,12 @@ using System;
 
 public class MapGenerator : MonoBehaviour
 {
+    public static MapGenerator mapMaker { get; private set; }
+
     public int mapSeed;
     public int rows;
     public int cols;
+    public bool isGenerated;
     public enum MapType { Seeded, Random, MapOfTheDay}
     public MapType mapType = MapType.Random;
     public GameObject[] gridPrefabs;
@@ -15,6 +18,19 @@ public class MapGenerator : MonoBehaviour
     [SerializeField] float roomWidth = 50.0f;
     [SerializeField] float rooomLength = 50.0f;
 
+
+    void Awake()
+    {
+        if (mapMaker != null && mapMaker != this)
+        {
+            Destroy(this.gameObject);
+        }
+        else
+        {
+            mapMaker = this;
+            DontDestroyOnLoad(this.gameObject);
+        }
+    }
 
     void Start()
     {

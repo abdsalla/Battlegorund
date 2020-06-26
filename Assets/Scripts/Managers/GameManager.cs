@@ -3,6 +3,13 @@ using System.Collections;
 using UnityEngine;
 using System;
 
+public class SaveData
+{
+    public string playerName;
+    public int score;
+    public int highScore;
+}
+
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get { return instance; } }
@@ -11,8 +18,11 @@ public class GameManager : MonoBehaviour
 
     [Header("Player")]
     public GameObject player; // prefab
-    public GameObject currentPlayer; // active player clone of prefab
-    public int lives = 3;
+    public GameObject currentPlayerOne; 
+    public GameObject currentPlayerTwo;
+    public int lives = 0;
+    public int numOfPlayers = 0;
+    public SaveData saveData;
 
     [Header("Scoring")]
     public float score = 0;
@@ -35,6 +45,12 @@ public class GameManager : MonoBehaviour
     [Header("Powerup Spots")]
     public List<GameObject> powerupSpots;
 
+    [Header("Scene Progression")]
+    public SceneLoader sceneLoader;
+
+    [Header("Audio")]
+    public SoundManager mixer;
+
     [Header("UI")]
     public UIManager healthTracker;
 
@@ -54,17 +70,25 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (currentPlayer == null && lives > 0) PlayerSpawn(RandomSpawn(playerSpawnPoints));
+        if (currentPlayerOne == null && lives >= 0) PlayerSpawn(RandomSpawn(playerSpawnPoints));
     }
 
     public void PlayerSpawn(GameObject spawnPoint) // Spawns Player at the given spawn point if there is no active Player in the scene
     {
-        if (!currentPlayer) currentPlayer = Instantiate(player, spawnPoint.transform.position, Quaternion.identity);
+        Debug.Log("No active player");
+        if (numOfPlayers == 0 && !currentPlayerOne)
+        {
+            Health playerOneHealth;
+
+            currentPlayerOne = Instantiate(player, spawnPoint.transform.position, Quaternion.identity);
+            playerOneHealth = currentPlayerOne.GetComponent<Health>();
+
+            playerOneHealth._sheildAmount = 0;
+        }
     }
 
     public GameObject RandomSpawn(List<GameObject> spawnPoints)
     {
-
         int spawnToGet = UnityEngine.Random.seed;
         spawnToGet = UnityEngine.Random.Range(0, spawnPoints.Count);
         return spawnPoints[spawnToGet];

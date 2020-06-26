@@ -41,4 +41,10 @@ public class UIManager : MonoBehaviour
         }
         else if (!isPlayer) unitToHeal.CurrentHealth += healValue;
     }
+
+    public void UpdateSheild(Health toUpdate)
+    {
+        toUpdate.sheild.value = toUpdate._sheildAmount;
+    }
+
 }

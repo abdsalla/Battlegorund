@@ -174,6 +174,6 @@ public class FiniteStateMachine : AIState
     void Collider()
     {
         pawn.shellPrefab = null;
-        ai.stoppingDist = 0.0f;
+        ai.stoppingDist = 0.30f;
     }
 }

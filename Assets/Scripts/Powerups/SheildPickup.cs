@@ -6,8 +6,11 @@ public class SheildPickup : Pickup
 {
     public float sheildCharge;
 
+    private GameManager instance;
+
     void Start()
     {
+        instance = GameManager.Instance;
         powerUpType = PowerUpType.Sheild;
         isPermanent = true;
     }
@@ -21,6 +24,7 @@ public class SheildPickup : Pickup
         {
             unitCheck._sheildAmount += sheildCharge;
             receiverPawn.AddEffect(GetComponent<Pickup>(), duration);
+            instance.healthTracker.UpdateSheild(unitCheck);
             Destroy(gameObject);
         }
     }

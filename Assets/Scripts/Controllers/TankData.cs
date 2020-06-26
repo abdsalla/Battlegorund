@@ -8,7 +8,9 @@ public class TankData : MonoBehaviour
 {
     private Pawn pawn;
 
+    public float playerNum;
     public Health health;
+
 
     void Start()
     {
@@ -24,7 +26,7 @@ public class TankData : MonoBehaviour
         Fire();
     }
 
-    void InputConvertMove()
+    void InputConvertMove() // Forward and Back
     {
         string moveDir;
         if (Input.GetKey(KeyCode.W))
@@ -41,7 +43,7 @@ public class TankData : MonoBehaviour
         }
     }
 
-    void InputConvertRotate()
+    void InputConvertRotate() // Turning
     {
         string rotateDir;
         if (Input.GetKey(KeyCode.A))

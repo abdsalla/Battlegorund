@@ -58,8 +58,6 @@ public class Health : MonoBehaviour
             fsm.currentState = AIState.State.Retreat;
         }
 
-        UpdateSheild();
-
     }
 
     public void DestroySelf() // Handles death and increments/decrements of player counters
@@ -80,11 +78,5 @@ public class Health : MonoBehaviour
                 Destroy(gameObject, 2.0f);
             }
         }
-    }
-
-    void UpdateSheild()
-    {
-        float newSheild = _sheildAmount;
-        sheild.value = newSheild;
     }
 }

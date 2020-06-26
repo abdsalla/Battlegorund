@@ -13,7 +13,7 @@ public class PlayerSpawn : MonoBehaviour
         instance = GameManager.Instance;
         SetSpawnPoint();
 
-        if (instance.currentPlayer == null) SpawnPlayer();
+        if (instance.currentPlayerOne == null) SpawnPlayer();
     }
 
     public void SpawnPlayer()
