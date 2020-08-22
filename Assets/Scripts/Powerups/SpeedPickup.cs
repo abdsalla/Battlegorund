@@ -5,6 +5,8 @@ using UnityEngine;
 public class SpeedPickup : Pickup
 {
 
+    private IEnumerator spawner;
+
     void Start()
     {
         powerUpType = PowerUpType.Speed;
@@ -13,13 +15,17 @@ public class SpeedPickup : Pickup
 
     public override void OnPickup(GameObject target)
     {
-        AIController aiCheck = target.GetComponent<AIController>();
 
-        if (receiverPawn != null && aiCheck == null)
+        if (receiverPawn != null)
         {
             receiverPawn.moveSpeed += 3f;
             receiverPawn.reverseSpeed += 3f;
-            receiverPawn.AddEffect(GetComponent<Pickup>(), duration);
+            generator.isActive = false;
+            spawner = generator.Timer(10);
+            generator.pickupNum = pNum;
+            StartCoroutine(spawner);
+            generator.ReplacePowerUp();
+            generator.activePowerUps[spotNum] = generator.newPower;
             Destroy(gameObject);
         }
     }

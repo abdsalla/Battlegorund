@@ -4,12 +4,22 @@ using UnityEngine;
 
 public class EnemySpawn : MonoBehaviour
 {
-    public float secsTilSpawn;
-    public float spawnTime;
+    [Header("Enemies")]
+    public float enemySpawnTime;
+    public float enemySpawnTimer;
     public GameObject activeEnemy;
     public GameObject enemyToSpawn;
     public Transform spawnPoint;
     public Transform[] patrolPath;
+
+    [Header("PowerUps")]
+    public float powerUpSpawnTime;
+    public float powerUpSpawnTimer;
+    public GameObject activePowerUp;
+    public GameObject rapidFire;
+    public GameObject shield;
+    public GameObject speed;
+    
 
     private GameManager instance;
 
@@ -23,11 +33,11 @@ public class EnemySpawn : MonoBehaviour
     {
         if (activeEnemy == null)
         {
-            secsTilSpawn -= Time.deltaTime;
-            if (secsTilSpawn <= 0)
+            enemySpawnTimer -= Time.deltaTime;
+            if (enemySpawnTimer <= 0)
             {
                 SpawnEnemy(spawnPoint);
-                secsTilSpawn = spawnTime;
+                enemySpawnTimer = enemySpawnTime;
             }
         }
     }
@@ -41,7 +51,7 @@ public class EnemySpawn : MonoBehaviour
         aIController.listInUse = patrolPath;
         instance.activeEnemies.Add(activeEnemy);
     }
-
+     
     public void RemoveEnemy() // Remove enenmy from list
     {    
         instance.activeEnemies.Remove(activeEnemy); 

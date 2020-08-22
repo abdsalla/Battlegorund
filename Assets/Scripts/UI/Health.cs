@@ -16,7 +16,7 @@ public class Health : MonoBehaviour
     public float maxHealth;
     public float maxSheild;
     [SerializeField] float _currentHealth;   
-    public float _sheildAmount;
+    [SerializeField] float _currentSheild;
 
     [Header("UI Visuals")]
     public Slider health;
@@ -24,6 +24,7 @@ public class Health : MonoBehaviour
 
     // UI Event for health, stamina and death
     public UnityFloatEvent OnHealthChange = new UnityFloatEvent();
+    public UnityFloatEvent OnSheildChange = new UnityFloatEvent();
     public UnityEvent OnDeath = new UnityEvent();
 
     public float CurrentHealth // Struct for Health values
@@ -41,11 +42,21 @@ public class Health : MonoBehaviour
         }
     }
 
+    public float CurrentSheild // Struct for Sheild values
+    {
+        get { return _currentSheild; }
+        set
+        {
+            _currentSheild = value;
+            OnSheildChange.Invoke(_currentSheild);
+            _currentSheild = Mathf.Clamp(_currentSheild, 0, maxSheild);
+        }
+    }
+
     void Start()
     {
         instance = GameManager.Instance;
         _currentHealth = maxHealth;
-        _sheildAmount = 0;
     }
 
     void Update()
@@ -63,18 +74,34 @@ public class Health : MonoBehaviour
     public void DestroySelf() // Handles death and increments/decrements of player counters
     {
         Pawn unitCheck = GetComponent<Pawn>();
+        TankData playerCheck = GetComponent<TankData>();
 
         if (unitCheck != null)
         {
             if (unitCheck.isPlayer == true)
             {
-                instance.lives -= 1;
-                instance.score -= instance.pointsDeducted;
+                if (playerCheck.playerNum == 1)
+                {
+                    instance.lives1 -= 1;
+                    instance.score1 -= instance.pointsDeducted;
+                }
+                else if (playerCheck.playerNum == 2)
+                {
+                    instance.lives2 -= 1;
+                    instance.score2 -= instance.pointsDeducted;
+                }
                 Destroy(gameObject);
             }
             else if (unitCheck.isPlayer == false)
             {
-                instance.score += instance.pointsAwarded;
+                if (playerCheck.playerNum == 1)
+                {
+                    instance.score1 += instance.pointsAwarded;
+                }
+                else if (playerCheck.playerNum == 2)
+                {
+                    instance.score2 += instance.pointsAwarded;
+                }
                 Destroy(gameObject, 2.0f);
             }
         }

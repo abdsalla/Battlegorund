@@ -9,6 +9,7 @@ public class FiniteStateMachine : AIState
     private AIController ai;
     private Health health;
     [SerializeField] float dangerZone;
+    public bool isPowerUp;
 
     void Start()
     {
@@ -21,6 +22,8 @@ public class FiniteStateMachine : AIState
        Behavior();
        Personality();
        Debug.Log(CheckHealth());
+
+       if (personality == Personalities.Glider) ai.FindBuff(); 
     }
 
     public override void Behavior()
@@ -29,11 +32,15 @@ public class FiniteStateMachine : AIState
         {
             case State.Patrol:
                 if (avoidanceStage != AvoidanceStage.None) { ai.AvoidObstacle(); }
+                else if (personality == Personalities.Glider && isPowerUp)
+                {
+                    pawn.MoveTo(target);
+                    pawn.RotateTowards(target.position, pawn.moveSpeed);
+                }
                 else { ai.Patrol(); }
 
                 if (CheckHealth() <= dangerZone)
                 {
-                    ai.FindHeal();
                     currentState = State.Retreat;
                 }
                 else if (IsInChaseRange()) currentState = State.Chase;
@@ -44,18 +51,25 @@ public class FiniteStateMachine : AIState
 
                 if (CheckHealth() <= dangerZone)
                 {
-                    ai.FindHeal();
                     currentState = State.Retreat;
                 }
                 else if (IsInAttackRange()) currentState = State.Attack;
                 break;
             case State.Attack:
                 if (avoidanceStage != AvoidanceStage.None) { ai.AvoidObstacle(); }
-                else { ai.Attack(); }
-
-                if (CheckHealth() <= dangerZone)
+                else if (personality == Personalities.Sniper)
                 {
-                    ai.FindHeal();
+                    ai.Attack();
+                    if ((Vector3.Distance(transform.position, target.position) < ai.stoppingDist)) pawn.Reverse();
+                    else if ((Vector3.Distance(transform.position, target.position) < ai.stoppingDist)) pawn.MoveForward();
+                }
+                else
+                {
+                    ai.Attack();
+                }
+
+                if (CheckHealth() <= dangerZone && personality != Personalities.Rammer)
+                {
                     currentState = State.Retreat;
                 }
                 else if (target == null)
@@ -65,9 +79,11 @@ public class FiniteStateMachine : AIState
                 }
                 break;
             case State.Retreat:
+
                 avoidanceStage = AvoidanceStage.None;              
                 if (CheckHealth() > dangerZone) currentState = State.Patrol;
-                ai.GetHeal();
+
+                if (ai.roomHeal != null) ai.GetHeal();
                 break;
         }
     }
@@ -147,7 +163,7 @@ public class FiniteStateMachine : AIState
                 Sniper();
                 break;
             case Personalities.Rammer:
-                Collider();
+                Rammer();
                 break;
         }
     }
@@ -171,7 +187,7 @@ public class FiniteStateMachine : AIState
         ai.stoppingDist = .7f;
     }
 
-    void Collider()
+    void Rammer()
     {
         pawn.shellPrefab = null;
         ai.stoppingDist = 0.30f;

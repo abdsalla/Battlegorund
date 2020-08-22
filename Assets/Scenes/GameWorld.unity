@@ -120,73 +120,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &202857917
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 202857919}
-  - component: {fileID: 202857918}
-  m_Layer: 0
-  m_Name: GM
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &202857918
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 202857917}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d04b8df2d442b94428c71bd3511de05e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 8131245898181481233, guid: af075ddc93c7c264f96af7d392016d88, type: 3}
-  currentPlayer: {fileID: 0}
-  lives: 3
-  score: 0
-  pointsAwarded: 10
-  pointsDeducted: 5
-  hunter: {fileID: 8062372702725984430, guid: 31f526770df02a44ea7e4c03eec24913, type: 3}
-  glider: {fileID: 4477405958821711611, guid: 53047cd6c574e6d459c1c4b27c659fa7, type: 3}
-  sniper: {fileID: 3009871562211540339, guid: dd35c6c1ce7141b4383a855944dc0383, type: 3}
-  rammer: {fileID: 4451389470639799453, guid: e8ae1edf83e18fc43b3f7364954eed8d, type: 3}
-  activeEnemies: []
-  allowedEnemies: 4
-  playerSpawnPoints: []
-  enemySpawnPoints:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  playerSpawn: {fileID: 0}
-  powerupSpots:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  healthTracker: {fileID: 1800150608}
---- !u!4 &202857919
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 202857917}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10, y: 28, z: -9}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -307,17 +240,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74ee1dfe24838f342918f670f72ee3f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isActive: 0
+  newPower: {fileID: 0}
+  choice: 0
+  gridSector: 0
+  entryNum: 0
+  pickupNum: 0
+  activePowerUps: []
+  sector: {fileID: 0}
   mapSeed: 2048
   rows: 2
   cols: 2
-  mapType: 2
+  isGenerated: 0
+  mapType: 1
   gridPrefabs:
   - {fileID: 6395739957570296765, guid: 1cac2e134261784428203dd146e758af, type: 3}
   - {fileID: 8224378604141255131, guid: 170c014184d8f114ca17191377944ab9, type: 3}
   - {fileID: 4127774644744488284, guid: 494c075584381724ca29af0b7e4a4a4c, type: 3}
   - {fileID: 7989940682801836116, guid: 7043c058a5599354daa67501820c8a59, type: 3}
   roomWidth: 50
-  rooomLength: 50
+  roomLength: 50
 --- !u!4 &1153363434
 Transform:
   m_ObjectHideFlags: 0
@@ -330,7 +272,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1800150606
 GameObject:

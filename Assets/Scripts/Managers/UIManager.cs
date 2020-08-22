@@ -15,10 +15,10 @@ public class UIManager : MonoBehaviour
     {
         if (isPlayer)
         {
-            if (unitToDamage._sheildAmount > 0)
+            if (unitToDamage.CurrentSheild > 0)
             {
-                unitToDamage._sheildAmount -= damageValue;
-                unitToDamage.sheild.value = unitToDamage._sheildAmount;
+                unitToDamage.CurrentSheild -= damageValue;
+                unitToDamage.sheild.value = unitToDamage.CurrentSheild;
             }
             else
             {
@@ -26,10 +26,7 @@ public class UIManager : MonoBehaviour
                 unitToDamage.health.value = unitToDamage.CurrentHealth;
             }   
         }
-        else if (!isPlayer)
-        {
-            unitToDamage.CurrentHealth -= damageValue;
-        }
+        else if (!isPlayer) unitToDamage.CurrentHealth -= damageValue;
     }
 
     public void HealDamage(Health unitToHeal, float healValue, bool isPlayer)
@@ -42,9 +39,9 @@ public class UIManager : MonoBehaviour
         else if (!isPlayer) unitToHeal.CurrentHealth += healValue;
     }
 
-    public void UpdateSheild(Health toUpdate)
-    {
-        toUpdate.sheild.value = toUpdate._sheildAmount;
+    public void UpdateSheild(Health toUpdate, Pawn receiver, float currentSheild)
+    { 
+        toUpdate.CurrentSheild += currentSheild;
+        toUpdate.sheild.value = toUpdate.CurrentSheild;
     }
-
 }

@@ -6,27 +6,33 @@ public class HealthPickup : Pickup
 {
 
     private GameManager instance;
+    public GameObject heal;
+
+    private IEnumerator spawner;
 
     void Start()
     {
         instance = GameManager.Instance;
-        isPermanent = false;
+        isPermanent = true;
     }
 
     public override void OnPickup(GameObject target)
     {
         Health healthToAffect = target.GetComponent<Health>();
-        AIController aiCheck = target.GetComponent<AIController>();
 
         if (receiverPawn != null)
         {
-            if (healthToAffect.CurrentHealth < healthToAffect.maxHealth && aiCheck != null) // if the unit isn't at full health
+            if (healthToAffect.CurrentHealth == healthToAffect.maxHealth) return;
+
+            if (healthToAffect.CurrentHealth < healthToAffect.maxHealth) // if the unit isn't at full health
             {
                 instance.healthTracker.HealDamage(healthToAffect, 25, false);
-            }
-            else if (healthToAffect.CurrentHealth < healthToAffect.maxHealth && aiCheck == null) // if the unit isn't at full health
-            {
-                instance.healthTracker.HealDamage(healthToAffect, 25, true);
+                generator.isActive = false;
+                spawner = generator.Timer(10);
+                generator.pickupNum = pNum;
+                StartCoroutine(spawner);
+                generator.ReplacePowerUp();
+                generator.activePowerUps[spotNum] = generator.newPower;
             }
             Destroy(gameObject);
         }

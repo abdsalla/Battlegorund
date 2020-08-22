@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class RapidFirePickup : Pickup
 {
+    private IEnumerator spawner;
 
     void Start()
     {
@@ -15,10 +16,15 @@ public class RapidFirePickup : Pickup
     {
         AIController aiCheck = target.GetComponent<AIController>();
 
-        if (receiverPawn != null && aiCheck == null)
+        if (receiverPawn != null)
         {
             receiverPawn.fireRate += .3f;
-            receiverPawn.AddEffect(GetComponent<Pickup>(), duration);
+            generator.isActive = false;
+            spawner = generator.Timer(10);
+            generator.pickupNum = pNum;
+            StartCoroutine(spawner);
+            generator.ReplacePowerUp();
+            generator.activePowerUps[spotNum] = generator.newPower;
             Destroy(gameObject);
         }
     }

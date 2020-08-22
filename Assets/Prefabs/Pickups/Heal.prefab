@@ -108,7 +108,9 @@ MonoBehaviour:
   spinRotation: {x: 0, y: 90, z: 0}
   isPermanent: 0
   duration: 0
+  origin: {fileID: 0}
   powerUpType: 0
+  heal: {fileID: 7427441120446420131}
 --- !u!82 &3380161546053499748
 AudioSource:
   m_ObjectHideFlags: 0

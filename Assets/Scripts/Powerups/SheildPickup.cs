@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class SheildPickup : Pickup
 {
-    public float sheildCharge;
+    public float sheildCharge = 25;
 
-    private GameManager instance;
+    [SerializeField] private GameManager instance;
+
+    private IEnumerator spawner;
 
     void Start()
     {
@@ -17,14 +19,19 @@ public class SheildPickup : Pickup
 
     public override void OnPickup(GameObject target)
     {
-        AIController aiCheck = target.GetComponent<AIController>();
         Health unitCheck = target.GetComponent<Health>();
 
-        if (receiverPawn != null && aiCheck == null)
+        if (receiverPawn != null)
         {
-            unitCheck._sheildAmount += sheildCharge;
-            receiverPawn.AddEffect(GetComponent<Pickup>(), duration);
-            instance.healthTracker.UpdateSheild(unitCheck);
+            Debug.Log("Pawn exists");
+            unitCheck.CurrentSheild += sheildCharge;
+            instance.healthTracker.UpdateSheild(unitCheck, receiverPawn, sheildCharge);
+            generator.isActive = false;
+            spawner = generator.Timer(10);
+            generator.pickupNum = pNum;
+            StartCoroutine(spawner);
+            generator.ReplacePowerUp();
+            generator.activePowerUps[spotNum] = generator.newPower;
             Destroy(gameObject);
         }
     }

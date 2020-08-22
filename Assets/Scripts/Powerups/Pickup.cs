@@ -7,15 +7,17 @@ using UnityEngine;
 public abstract class Pickup : MonoBehaviour
 {
     [SerializeField] Vector3 spinRotation;
-    protected Pawn receiverPawn;
+    [SerializeField] protected Pawn receiverPawn;
+    public MapGenerator generator;
+    public Room spawnedAt;
+    public int spotNum;
+    public int pNum;
     public bool isPermanent;
     public float duration;
 
     public enum PowerUpType { Sheild, RapidFire, Speed }
     public PowerUpType powerUpType;
 
-
-    public virtual void Start() { }
 
     public virtual void Update()
     {
@@ -30,5 +32,6 @@ public abstract class Pickup : MonoBehaviour
     {
         receiverPawn = other.gameObject.GetComponent<Pawn>();
         OnPickup(other.gameObject);
+        Debug.Log("Passed through pickup");
     }
 }

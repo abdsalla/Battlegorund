@@ -8,7 +8,7 @@ public class TankData : MonoBehaviour
 {
     private Pawn pawn;
 
-    public float playerNum;
+    public int playerNum;
     public Health health;
 
 
@@ -28,37 +28,85 @@ public class TankData : MonoBehaviour
 
     void InputConvertMove() // Forward and Back
     {
-        string moveDir;
-        if (Input.GetKey(KeyCode.W))
+        if (playerNum == 1)
         {
-            moveDir = "Accelerate";
-            pawn.Move(moveDir);
-            moveDir = null;
+            string moveDir;
+            if (Input.GetKey(KeyCode.W))
+            {
+                moveDir = "Accelerate";
+                pawn.Move(moveDir);
+                moveDir = null;
+            }
+            else if (Input.GetKey(KeyCode.S))
+            {
+                moveDir = "Reverse";
+                pawn.Move(moveDir);
+                moveDir = null;
+            }
         }
-        else if (Input.GetKey(KeyCode.S))
+        else if (playerNum == 2)
         {
-            moveDir = "Reverse";
-            pawn.Move(moveDir);
-            moveDir = null;
+            string moveDir;
+            if (Input.GetKey(KeyCode.UpArrow))
+            {
+                moveDir = "Accelerate";
+                pawn.Move(moveDir);
+                moveDir = null;
+            }
+            else if (Input.GetKey(KeyCode.DownArrow))
+            {
+                moveDir = "Reverse";
+                pawn.Move(moveDir);
+                moveDir = null;
+            }
         }
     }
 
     void InputConvertRotate() // Turning
     {
-        string rotateDir;
-        if (Input.GetKey(KeyCode.A))
-        {
-            rotateDir = "CounterClockwise";
-            pawn.Turn(rotateDir);
-            rotateDir = null;
+        if (playerNum == 1)
+        { 
+            string rotateDir;
+            if (Input.GetKey(KeyCode.A))
+            {
+                rotateDir = "CounterClockwise";
+                pawn.Turn(rotateDir);
+                rotateDir = null;
+            }
+            else if (Input.GetKey(KeyCode.D))
+            {
+                rotateDir = "Clockwise";
+                pawn.Turn(rotateDir);
+                rotateDir = null;
+            }
         }
-        else if (Input.GetKey(KeyCode.D))
+        else if (playerNum == 2)
         {
-            rotateDir = "Clockwise";
-            pawn.Turn(rotateDir);
-            rotateDir = null;
+            string rotateDir;
+            if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                rotateDir = "CounterClockwise";
+                pawn.Turn(rotateDir);
+                rotateDir = null;
+            }
+            else if (Input.GetKey(KeyCode.RightArrow))
+            {
+                rotateDir = "Clockwise";
+                pawn.Turn(rotateDir);
+                rotateDir = null;
+            }
         }
     }
 
-    void Fire() { if (Input.GetButtonDown("Fire")) pawn.Shoot(); }
+    void Fire()
+    {
+        if (playerNum == 1)
+        {
+            if (Input.GetButtonDown("Fire")) pawn.Shoot();
+        }
+        else if (playerNum == 2)
+        {
+            if (Input.GetButtonDown("Fire2")) pawn.Shoot();
+        }
+    }
 }

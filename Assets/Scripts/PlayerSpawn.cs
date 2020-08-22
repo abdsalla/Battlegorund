@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class PlayerSpawn : MonoBehaviour
 {
-    public GameObject spawnPoint;
+    public GameObject spawnPoint1;
+    public GameObject spawnPoint2;
 
     private GameManager instance;
 
@@ -12,22 +13,27 @@ public class PlayerSpawn : MonoBehaviour
     {
         instance = GameManager.Instance;
         SetSpawnPoint();
-
-        if (instance.currentPlayerOne == null) SpawnPlayer();
+        SpawnPlayer();
     }
 
     public void SpawnPlayer()
     {
-        instance.PlayerSpawn(instance.RandomSpawn(instance.playerSpawnPoints));
+        if (instance.isTwoPlayer)
+        {
+            instance.PlayerSpawn(instance.RandomSpawn(instance.playerSpawnPoints));
+            instance.TwoPlayerSpawn(instance.RandomSpawn(instance.playerSpawnPoints));
+        }
+        else instance.PlayerSpawn(instance.RandomSpawn(instance.playerSpawnPoints));
     }
 
     public void SetSpawnPoint()
     {
-        instance.playerSpawnPoints.Add(spawnPoint);
+        instance.playerSpawnPoints.Add(spawnPoint1);
+        instance.playerSpawnPoints.Add(spawnPoint2);
     }
 
     public void RemoveSpawnPoint()
     {
-        instance.playerSpawnPoints.Remove(spawnPoint);
+        instance.playerSpawnPoints.Remove(spawnPoint1);
     }
 }

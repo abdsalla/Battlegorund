@@ -7,7 +7,7 @@ using UnityEngine;
 public class AIController : MonoBehaviour
 {
     [SerializeField] FiniteStateMachine fsm;
-    [SerializeField] GameObject roomHeal;
+    [SerializeField] GameObject heal;
     private GameManager instance;
     private float exitTime = 0;
     private Pawn pawn;
@@ -19,6 +19,7 @@ public class AIController : MonoBehaviour
     public float stoppingDist = .3f;
     public float avoidanceTime = 2.0f;
     public Transform[] listInUse;
+    public HealthPickup roomHeal;
     public Health health;
 
 
@@ -29,35 +30,31 @@ public class AIController : MonoBehaviour
         health = pawn.GetComponent<Health>();
         fsm.avoidanceStage = AIState.AvoidanceStage.None;
         pawn.isPlayer = false;
+        HealSet();
     }
 
     void Update()
     {
+        if (roomHeal == null) HealSet();
         Debug.Log("Enemy CurrentHealth: " + health.CurrentHealth);
         Debug.Log("AvoidanceStage: " + CanMove());
     }
 
-    bool CanMove() // Is there an obstacle blocking our tank's path?
+    public void Attack()
     {
-        RaycastHit hit;
-        Health unitCheck;
-        GameObject obstacle;
+        pawn.RotateTo(fsm.target);
 
-        if (fsm.currentState == AIState.State.Retreat) return true;
-
-        if (Physics.Raycast(transform.position, transform.forward, out hit, aggroRadius)) // Object in front
+        if (CanMove())
         {
-            unitCheck = hit.collider.gameObject.GetComponent<Health>();
-            obstacle = hit.collider.gameObject;
-
-            if (unitCheck == null && obstacle.tag == "Obstacle")
+            fsm.avoidanceStage = AIState.AvoidanceStage.Move;
+            if (fsm.personality != AIState.Personalities.Rammer)
             {
-                fsm.avoidanceStage = AIState.AvoidanceStage.Rotate;
-                return false;
-            } // Avoid
+                pawn.MoveTo(fsm.target);
+                pawn.Shoot();
+            }
+            else pawn.MoveTo(fsm.target);
         }
-        fsm.avoidanceStage = AIState.AvoidanceStage.None;
-        return true; // Is a tank proceed
+        else fsm.avoidanceStage = AIState.AvoidanceStage.Rotate;
     }
 
     public void AvoidObstacle()
@@ -92,7 +89,74 @@ public class AIController : MonoBehaviour
                 Debug.Log("Continuing Avoidance");
                 fsm.avoidanceStage = AIState.AvoidanceStage.Rotate;
             }
-        } 
+        }
+    }
+
+    bool CanMove() // Is there an obstacle blocking our tank's path?
+    {
+        RaycastHit hit;
+        Health unitCheck;
+        GameObject obstacle;
+
+        if (fsm.currentState == AIState.State.Retreat) return true;
+
+        if (Physics.Raycast(transform.position, transform.forward, out hit, aggroRadius)) // Object in front
+        {
+            unitCheck = hit.collider.gameObject.GetComponent<Health>();
+            obstacle = hit.collider.gameObject;
+
+            if (unitCheck == null && obstacle.tag == "Obstacle")
+            {
+                fsm.avoidanceStage = AIState.AvoidanceStage.Rotate;
+                return false;
+            } // Avoid
+        }
+        fsm.avoidanceStage = AIState.AvoidanceStage.None;
+        return true; // Is a tank proceed
+    }
+
+    public void FindBuff()
+    {
+        Ray ray = new Ray();
+        RaycastHit hit;
+        Pickup pRespawn;
+        GameObject powerUp;
+        GameObject obstacle;
+
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, aggroRadius);  // Object in front
+
+        foreach (var hitCollider in hitColliders)
+        {
+            pRespawn = hitCollider.gameObject.GetComponent<Pickup>();
+
+            if (pRespawn != null)
+            {
+                powerUp = pRespawn.gameObject;
+                fsm.target = powerUp.transform;
+            }
+        }
+    }
+
+    void HealSet()
+    {
+        Ray ray = new Ray();
+        RaycastHit hit;
+        HealthPickup hRespawn;
+        GameObject health;
+        GameObject obstacle;
+
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, aggroRadius);  // Object in front
+
+        foreach (var hitCollider in hitColliders)
+        {
+            hRespawn = hitCollider.gameObject.GetComponent<HealthPickup>();
+
+            if (hRespawn != null)
+            {
+                health = hRespawn.heal.gameObject;
+                roomHeal = heal.GetComponent<HealthPickup>();
+            }
+        }
     }
 
     public void Patrol()
@@ -124,35 +188,15 @@ public class AIController : MonoBehaviour
         return true;
     }
 
-    public void FindHeal()
+    public void GetHeal()
     {
         Debug.Log("Finding Heal");
         fsm.target = null;
         if (fsm.target == null && roomHeal != null) fsm.target = roomHeal.transform;
-    }
 
-    public void GetHeal()
-    {       
         fsm.avoidanceStage = AIState.AvoidanceStage.None;
         pawn.MoveTo(fsm.target);
         pawn.RotateTo(fsm.target);
-    }
-
-    public void Attack()
-    {
-        pawn.RotateTo(fsm.target);
-
-        if (CanMove())
-        {
-            fsm.avoidanceStage = AIState.AvoidanceStage.Move;
-            if (fsm.personality != AIState.Personalities.Rammer)
-            {
-                pawn.MoveTo(fsm.target);
-                pawn.Shoot();
-            }
-            else pawn.MoveTo(fsm.target);
-        }    
-        else fsm.avoidanceStage = AIState.AvoidanceStage.Rotate;
     }
 
     public void Chase()

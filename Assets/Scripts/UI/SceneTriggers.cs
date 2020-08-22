@@ -16,8 +16,12 @@ public class SceneTriggers : MonoBehaviour
 
     void OnEnable()
     {
-        instance = GameManager.Instance;
         if (sceneLoader == null) sceneLoader = instance.sceneLoader;
+    }
+
+    void Start()
+    {
+        instance = GameManager.Instance;
     }
 
     public void SceneSwitch()
@@ -29,6 +33,7 @@ public class SceneTriggers : MonoBehaviour
                 break;
             case Scenes.World:
                 sceneLoader.RunWorld();
+                instance = GameManager.Instance;
                 break;
             case Scenes.GameOver:
                 sceneLoader.RunGameOver();
@@ -47,6 +52,12 @@ public class SceneTriggers : MonoBehaviour
         AudioSource audio = GetComponent<AudioSource>();
         audio.PlayOneShot(click);
         StartCoroutine(Press());
+    }
+
+    public void TwoPlayerMode(bool status)
+    {
+        sceneLoader.multScene = status;
+        instance.isTwoPlayer = status;
     }
 
     IEnumerator Press()

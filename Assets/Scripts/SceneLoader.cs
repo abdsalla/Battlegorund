@@ -19,6 +19,8 @@ public class SceneLoader : MonoBehaviour
     public Scene gameOverScene;
     public Scene optionsScene;
 
+    public bool multScene;
+
     private IEnumerator result;
     private GameManager instance;
 

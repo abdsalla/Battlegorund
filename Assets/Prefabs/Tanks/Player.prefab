@@ -292,7 +292,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 0}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 50
+  m_MaxValue: 100
   m_WholeNumbers: 0
   m_Value: 0
   m_OnValueChanged:
@@ -312,6 +312,7 @@ GameObject:
   - component: {fileID: 1141375777932727783}
   - component: {fileID: 6480054837437511950}
   - component: {fileID: 7617601559086280016}
+  - component: {fileID: 7699915717246615826}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -400,6 +401,21 @@ MonoBehaviour:
   target: {fileID: 8131245898181250801}
   theCamera: {fileID: 1141375777932727783}
   targetRotateSpeed: 10
+--- !u!114 &7699915717246615826
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3921878914693098174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 402f2ed49ef9b89438abee281d846266, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerOneCam: {fileID: 0}
+  playerTwoCam: {fileID: 0}
+  playerData: {fileID: 8131245898181383171}
 --- !u!1 &4126998429421258118
 GameObject:
   m_ObjectHideFlags: 0
@@ -830,6 +846,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6d1e41d24aa79894e83652c427747885, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerNum: 1
   health: {fileID: 6368990942077696578}
 --- !u!54 &4484308977650209563
 Rigidbody:
@@ -882,7 +899,6 @@ MonoBehaviour:
   roundSpeed: 100
   shotCooldown: 0
   controller: {fileID: 0}
-  activeEffects: []
   isPlayer: 1
 --- !u!114 &6368990942077696578
 MonoBehaviour:
@@ -897,9 +913,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
-  maxSheild: 50
+  maxSheild: 100
   _currentHealth: 100
-  _sheildAmount: 0
+  _currentSheild: 0
   health: {fileID: 6289037711035565735}
   sheild: {fileID: 2836697862794359824}
   OnDeath:
