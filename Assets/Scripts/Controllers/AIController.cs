@@ -36,8 +36,6 @@ public class AIController : MonoBehaviour
     void Update()
     {
         if (roomHeal == null) HealSet();
-        Debug.Log("Enemy CurrentHealth: " + health.CurrentHealth);
-        Debug.Log("AvoidanceStage: " + CanMove());
     }
 
     public void Attack()

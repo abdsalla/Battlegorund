@@ -5,7 +5,6 @@ using UnityEngine;
 using System.IO;
 using System;
 
-[System.Serializable]
 public class SaveData
 {
     public int score1;
@@ -90,13 +89,10 @@ public class GameManager : MonoBehaviour
                 if (currentPlayerTwo == null && lives2 >= 1) TwoPlayerSpawn(RandomSpawn(playerSpawnPoints));
             }
         }
-
-        CheckGameStatus();
     }
 
-    public void PlayerSpawn(GameObject spawnPoint) // Spawns Player at the given spawn point if there is no active Player in the scene
+    public void PlayerSpawn(GameObject spawnPoint) // Spawns Player 1 at the given spawn point if there is no active Player in the scene
     {
-        Debug.Log("No active player");
         if (!currentPlayerOne)
         {
             Health playerOneHealth;
@@ -106,14 +102,11 @@ public class GameManager : MonoBehaviour
             lives1 = 3;
             playerOneHealth.CurrentSheild = 0;
             numOfPlayers++;
-            
         }
-        healthTracker =
     }
 
-    public void TwoPlayerSpawn(GameObject spawnPoint2) // Spawns Player at the given spawn point if there is no active Player in the scene
+    public void TwoPlayerSpawn(GameObject spawnPoint2) // Spawns Player 2 at the given spawn point if there is no active Player in the scene
     {
-        Debug.Log("No active player");
         if (numOfPlayers > 0 && !currentPlayerTwo)
         {
             Health playerTwoHealth;
@@ -158,8 +151,5 @@ public class GameManager : MonoBehaviour
         FileStream file = File.Create(Application.persistentDataPath + "/scoresave.sv" );
         bf.Serialize(file, save);
         file.Close();
-
     }
-
-
 }

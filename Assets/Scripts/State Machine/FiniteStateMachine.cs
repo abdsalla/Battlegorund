@@ -21,7 +21,6 @@ public class FiniteStateMachine : AIState
     {
        Behavior();
        Personality();
-       Debug.Log(CheckHealth());
 
        if (personality == Personalities.Glider) ai.FindBuff(); 
     }

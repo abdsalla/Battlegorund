@@ -6,26 +6,31 @@ public class SheildPickup : Pickup
 {
     public float sheildCharge = 25;
 
-    [SerializeField] private GameManager instance;
+    [SerializeField] GameManager instance;
+    [SerializeField] UIManager ui;
+    [SerializeField] Health unitCheck;
 
     private IEnumerator spawner;
 
     void Start()
     {
         instance = GameManager.Instance;
+        ui = instance.healthTracker;
         powerUpType = PowerUpType.Sheild;
         isPermanent = true;
     }
 
     public override void OnPickup(GameObject target)
     {
-        Health unitCheck = target.GetComponent<Health>();
+        unitCheck = target.GetComponent<Health>();
 
-        if (receiverPawn != null)
+        Debug.Log("Collided");
+
+        if (!receiverPawn)
         {
-            Debug.Log("Pawn exists");
+            Debug.Log("Has Pawn");
             unitCheck.CurrentSheild += sheildCharge;
-            instance.healthTracker.UpdateSheild(unitCheck, receiverPawn, sheildCharge);
+            ui.UpdateSheild(unitCheck, receiverPawn, sheildCharge);
             generator.isActive = false;
             spawner = generator.Timer(10);
             generator.pickupNum = pNum;
@@ -34,5 +39,6 @@ public class SheildPickup : Pickup
             generator.activePowerUps[spotNum] = generator.newPower;
             Destroy(gameObject);
         }
+       
     }
 }

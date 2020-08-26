@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class UIManager : MonoBehaviour
 {
-    private GameManager instance;
+    [SerializeField] private GameManager instance;
 
     void Start()
     {
         instance = GameManager.Instance;
+        SetManager();
     }
 
     public void RecieveDamage(Health unitToDamage, float damageValue, bool isPlayer) // Make Health visual match the healthbar value
@@ -40,8 +41,14 @@ public class UIManager : MonoBehaviour
     }
 
     public void UpdateSheild(Health toUpdate, Pawn receiver, float currentSheild)
-    { 
+    {
+        Debug.Log("Updating UI");
         toUpdate.CurrentSheild += currentSheild;
         toUpdate.sheild.value = toUpdate.CurrentSheild;
+    }
+
+    public void SetManager()
+    {
+        instance.healthTracker = this;
     }
 }

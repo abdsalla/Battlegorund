@@ -145,7 +145,6 @@ public class MapGenerator : MonoBehaviour
         Pickup properties;
 
         choice = UnityEngine.Random.Range(0, 3);
-        Debug.Log("Choice" + choice);
 
         if (!isActive)
         {   

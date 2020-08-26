@@ -18,7 +18,7 @@ public class RapidFirePickup : Pickup
 
         if (receiverPawn != null)
         {
-            receiverPawn.fireRate += .3f;
+            receiverPawn.fireRate -= .2f;
             generator.isActive = false;
             spawner = generator.Timer(10);
             generator.pickupNum = pNum;

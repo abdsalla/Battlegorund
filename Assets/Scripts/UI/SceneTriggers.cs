@@ -14,14 +14,14 @@ public class SceneTriggers : MonoBehaviour
     private GameManager instance;
 
 
-    void OnEnable()
-    {
-        if (sceneLoader == null) sceneLoader = instance.sceneLoader;
-    }
-
     void Start()
     {
         instance = GameManager.Instance;
+    }
+    
+    void Update()
+    {
+        if (sceneLoader) instance.sceneLoader = sceneLoader;
     }
 
     public void SceneSwitch()
