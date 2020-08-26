@@ -102,11 +102,19 @@ public class TankData : MonoBehaviour
     {
         if (playerNum == 1)
         {
-            if (Input.GetButtonDown("Fire")) pawn.Shoot();
+            if (Input.GetButtonDown("Fire"))
+            {
+                pawn.owner = 1;
+                pawn.Shoot();
+            }
         }
         else if (playerNum == 2)
         {
-            if (Input.GetButtonDown("Fire2")) pawn.Shoot();
+            if (Input.GetButtonDown("Fire2"))
+            {
+                pawn.owner = 2;
+                pawn.Shoot();
+            }
         }
     }
 }

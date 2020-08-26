@@ -4,7 +4,10 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Obstacle
+  - SoundManager
+  - UIManager
+  - SceneManager
+  - ReturnButton
   layers:
   - Default
   - TransparentFX

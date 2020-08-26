@@ -8,6 +8,8 @@ public class BulletData : MonoBehaviour
     [SerializeField] float travelSpeed;
     [SerializeField] float lifespan = 1.5f;
 
+    public int owner;
+
     private GameManager instance;
     private UIManager healthTracker;
 
@@ -31,6 +33,8 @@ public class BulletData : MonoBehaviour
 
         if (otherHealth != null && otherPawn != null)
         {
+
+            otherHealth.lastShooter = owner;
             healthTracker.RecieveDamage(otherHealth, damageDone, otherPawn.isPlayer);
         }
         Destroy(gameObject);

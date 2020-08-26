@@ -22,6 +22,8 @@ public class Health : MonoBehaviour
     public Slider health;
     public Slider sheild;
 
+    public int lastShooter;
+
     // UI Event for health, stamina and death
     public UnityFloatEvent OnHealthChange = new UnityFloatEvent();
     public UnityFloatEvent OnSheildChange = new UnityFloatEvent();
@@ -80,25 +82,27 @@ public class Health : MonoBehaviour
         {
             if (unitCheck.isPlayer == true)
             {
-                if (playerCheck.playerNum == 1)
+                if (lastShooter == 1)
                 {
                     instance.lives1 -= 1;
+                    instance.CheckState();
                     instance.score1 -= instance.pointsDeducted;
                 }
-                else if (playerCheck.playerNum == 2)
+                else if (lastShooter == 2)
                 {
                     instance.lives2 -= 1;
+                    instance.CheckState();
                     instance.score2 -= instance.pointsDeducted;
                 }
                 Destroy(gameObject);
             }
             else if (unitCheck.isPlayer == false)
             {
-                if (playerCheck.playerNum == 1)
+                if (lastShooter == 1)
                 {
                     instance.score1 += instance.pointsAwarded;
                 }
-                else if (playerCheck.playerNum == 2)
+                else if (lastShooter == 2)
                 {
                     instance.score2 += instance.pointsAwarded;
                 }

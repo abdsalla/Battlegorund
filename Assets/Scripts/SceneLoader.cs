@@ -14,6 +14,7 @@ public class SceneLoader : MonoBehaviour
 
     [Header("Scene List")]
     public Scene currentScene;
+    public Scene lastScene;
     public Scene startScene;
     public Scene worldScene;
     public Scene gameOverScene;
@@ -22,7 +23,8 @@ public class SceneLoader : MonoBehaviour
     public bool multScene;
 
     private IEnumerator result;
-    private GameManager instance;
+    [SerializeField] private GameManager instance;
+
 
     void Awake()
     {
@@ -51,24 +53,53 @@ public class SceneLoader : MonoBehaviour
         optionsScene = SceneManager.GetSceneByBuildIndex(3);
     }
 
+    public void Return()
+    {
+        SceneTriggers backButton;
+        GameObject rtnBtn = GameObject.FindWithTag("ReturnButton");
+
+        if (rtnBtn)
+        {
+            Debug.Log("Button Exists");
+            backButton = rtnBtn.GetComponent<SceneTriggers>();
+            backButton.sceneLoader = this;
+        }
+    }
+
     // The below functions Load our scenes setup in build settings through Index number
 
     public void RunStart()
     {
+        lastScene = currentScene;
         SceneManager.LoadScene(START_INDEX);
+        instance.LoadSubManagers();
     }
 
     public void RunWorld()
     {
+        lastScene = currentScene;
         SceneManager.LoadScene(WORLD_INDEX);
+        instance.LoadSubManagers();
     }
 
     public void RunGameOver()
     {
+        lastScene = currentScene;
         SceneManager.LoadScene(GAME_OVER_INDEX);
+        instance.LoadSubManagers();
     }
 
-    public void RunOptions() { SceneManager.LoadSceneAsync(OPTIONS_INDEX); }
+    public void RunOptions()
+    {
+        SceneLoader tempSC = instance.sceneLoader;
+        SoundManager tempSM = instance.mixer;
+        UIManager tempUM = instance.healthTracker;
+
+        lastScene = currentScene;
+        SceneManager.LoadSceneAsync(OPTIONS_INDEX);
+        ResetRef();
+        Return();
+    }
 
     public void Quitter() { StartCoroutine(Quit()); }
 
@@ -82,5 +113,11 @@ public class SceneLoader : MonoBehaviour
 
         UnityEditor.EditorApplication.isPlaying = false; // Editor Quit
         yield return result;
+    }
+
+    void ResetRef()
+    {
+        instance.sceneLoader = this;
+        Debug.Log("Reference set");
     }
 }

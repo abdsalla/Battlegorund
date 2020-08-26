@@ -18,10 +18,15 @@ public class SceneTriggers : MonoBehaviour
     {
         instance = GameManager.Instance;
     }
-    
+
     void Update()
     {
-        if (sceneLoader) instance.sceneLoader = sceneLoader;
+        if (!sceneLoader)
+        {
+            instance = GameManager.Instance;
+            instance.LoadSubManagers();
+            instance.sceneLoader = sceneLoader;
+        }
     }
 
     public void SceneSwitch()
@@ -64,4 +69,5 @@ public class SceneTriggers : MonoBehaviour
     {
         yield return new WaitForSeconds(click.length);
     }
+
 }

@@ -26,7 +26,7 @@ public class SheildPickup : Pickup
 
         Debug.Log("Collided");
 
-        if (!receiverPawn)
+        if (receiverPawn)
         {
             Debug.Log("Has Pawn");
             unitCheck.CurrentSheild += sheildCharge;

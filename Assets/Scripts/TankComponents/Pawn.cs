@@ -15,6 +15,7 @@ public class Pawn : MonoBehaviour
     public float fireRate = .5f;
     public float roundSpeed = 100f;
     [SerializeField] float shotCooldown;
+    public int owner;
 
     [Header("AI Values")]
     [SerializeField] AIController controller;
@@ -50,6 +51,7 @@ public class Pawn : MonoBehaviour
         {
             GameObject bullet = Instantiate(shellPrefab, firePoint.position, firePoint.rotation) as GameObject;
             BulletData bulletData = bullet.GetComponent<BulletData>();
+            bulletData.owner = owner;
             shotCooldown = 0;
         }
     }

@@ -17,8 +17,9 @@ public class GameManager : MonoBehaviour
     public static GameManager Instance { get { return instance; } }
     private static GameManager instance;
 
-
     [Header("Player")]
+    public bool isSameSession1 = false;
+    public bool isSameSession2 = false;
     public bool isTwoPlayer;
     public GameObject playerOne; // prefab
     public GameObject playerTwo;
@@ -46,7 +47,7 @@ public class GameManager : MonoBehaviour
     [Header("Spawn Locations")]
     public List<GameObject> playerSpawnPoints;
     public List<Transform> enemySpawnPoints;
-    [SerializeField] PlayerSpawn playerSpawn;
+    PlayerSpawn playerSpawn;
 
     [Header("Powerup Spots")]
     public List<GameObject> powerupSpots;
@@ -99,7 +100,9 @@ public class GameManager : MonoBehaviour
 
             currentPlayerOne = Instantiate(playerOne, spawnPoint.transform.position, Quaternion.identity);
             playerOneHealth = currentPlayerOne.GetComponent<Health>();
-            lives1 = 3;
+            if (isSameSession1) Debug.Log("Lives updated");
+            else lives1 = 3;
+            isSameSession1 = true;
             playerOneHealth.CurrentSheild = 0;
             numOfPlayers++;
         }
@@ -112,7 +115,8 @@ public class GameManager : MonoBehaviour
             Health playerTwoHealth;
             currentPlayerTwo = Instantiate(playerTwo, spawnPoint2.transform.position, Quaternion.identity);
             playerTwoHealth = currentPlayerTwo.GetComponent<Health>();
-            lives2 = 3;
+            if (isSameSession2) Debug.Log("Lives updated");
+            else lives2 = 3;
             playerTwoHealth.CurrentSheild = 0;
             numOfPlayers++;
         }
@@ -151,5 +155,22 @@ public class GameManager : MonoBehaviour
         FileStream file = File.Create(Application.persistentDataPath + "/scoresave.sv" );
         bf.Serialize(file, save);
         file.Close();
+    }
+
+    public void LoadSubManagers()
+    {
+        GameObject smObj = GameObject.FindGameObjectWithTag("SoundManager");
+        GameObject uiObj = GameObject.FindGameObjectWithTag("UIManager");
+
+        mixer = smObj.GetComponent<SoundManager>();
+    }
+
+
+    public void CheckState()
+    {
+        if (lives1 >= 0 && lives2 >= 0)
+        {
+            sceneLoader.Quitter();
+        }
     }
 }

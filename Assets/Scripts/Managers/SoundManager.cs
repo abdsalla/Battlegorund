@@ -7,6 +7,7 @@ public class SoundManager : MonoBehaviour
 {
     public static SoundManager masterMixer { get; private set; }
 
+    private GameManager instance;
     private SceneLoader sceneLoader;
 
     [SerializeField] AudioMixer mixer;
@@ -30,6 +31,7 @@ public class SoundManager : MonoBehaviour
 
     void Start()
     {
+        instance = GameManager.Instance;
         sceneLoader = SceneLoader.sceneManager;
         source.Play();
     }
